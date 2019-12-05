@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+		
+		<context:component-scan base-package="com.jdbc"/>
+		<mvc:annotation-driven/>
+		<context:annotation-config/>
+		
+		<bean id="daoService" class="com.jdbc.service.UserServiceDaoImpl">
+		<property name="userDao" ref="userDao"></property>
+		</bean>
+		<bean id="userDao" class="com.jdbc.dao.UserDaoImpl">
+		<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"></property>
+		</bean>
+		
+		<bean id="adminDaoService" class="com.jdbc.service.admin.AdminDaoServiceImpl">
+		<property name="adminDao" ref="adminDao"></property>
+		</bean>
+		<bean id="adminDao" class="com.jdbc.dao.admin.AdminDaoImpl">
+		<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"></property>
+		
+		</bean>
+		
+		
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://localhost:3306/user"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="root"></property>
+		</bean>
+		
+		<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg name="dataSource" ref="dataSource"/>
+		</bean>
+
+		
+</beans>
