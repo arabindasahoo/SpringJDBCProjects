@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -22,11 +23,14 @@ import com.jdbc.service.admin.AdminDaoService;
 @RequestMapping(value = "/admin")
 public class AdminController {
 
+	private static Logger logger = Logger.getLogger(AdminController.class);
+	
 	@Autowired
 	AdminDaoService adminDaoService;
 
 	@RequestMapping(value = "/adminHome", method = RequestMethod.GET)
 	public String getAdminHome() {
+		logger.info("ADMIN HOME PAGE RENDER TO BROWSER");
 		return "adminHome";
 	}
 
@@ -35,6 +39,7 @@ public class AdminController {
 		ModelAndView mav = new ModelAndView("adminRegisterPage");
 		mav.addObject("status", getStatus());
 		mav.addObject("admin", new Admin());
+		logger.info("ADMIN REGISTER PAGE RENDER TO BROWSER");
 		return mav;
 	}
 
@@ -42,28 +47,35 @@ public class AdminController {
 	public ModelAndView createAdmin(@Valid @ModelAttribute("admin") Admin admin, BindingResult result) {
 		ModelAndView mav = new ModelAndView();
 		if (result.hasErrors()) {
+			logger.info("ADMIN REGISTER FORM PAGE HAS ERROR");
 			mav.setViewName("adminRegisterPage");
 			mav.addObject("status", getStatus());
+			logger.info("ADMIN REGISTER PAGE RENDER TO BROWSER AGAIN");
 			return mav;
 		}
 
 		boolean flag = adminDaoService.checkIsExist();
 
 		if (flag == true) {
+			logger.info("BEFORE SAVING INTO DATA BASE ADMIN EXISTENCE CHECKED");
 			mav.setViewName("failure");
 			mav.addObject("message", "ADMIN ALREADY EXIT");
+			logger.info("ADMIN ALREADY EXIST");
 			return mav;
 		} else {
+			logger.info("CREAT ADMIN METHOD CALLED");
 			boolean flag2 = adminDaoService.createAdmin(admin);
 			if (flag2 == true) {
 				mav.setViewName("success");
 				mav.addObject("message", "ADMIN REGISTRATION SUCCESSFUL");
+				logger.info("ADMIN SUCCESSFULLY REGISTER");
 				return mav;
 			}
 			else
 			{
 				mav.setViewName("failure");
 				mav.addObject("message", "ADMIN CAN NOT REGISTERED SUCCESSFULLY");
+				logger.info("ADMIN IS NOT SUCCESSFULLY REGISTERED");
 				return mav;
 			}
 		}
@@ -74,8 +86,10 @@ public class AdminController {
 	public ModelAndView getAllUsers(HttpSession session)
 	{
 		ModelAndView mav = new ModelAndView();
+		logger.info("ADMIN CALLED SHOW USE LIST");
 		mav.addObject("userData",adminDaoService.getAllUsers());
 		mav.setViewName("AllUserList");
+		logger.info("ALL USER LIST PAGE RENDER TO BROWSER");
 		return mav;
 		
 	}
@@ -84,16 +98,19 @@ public class AdminController {
 	public ModelAndView approveUser(@RequestParam("id") int id)
 	{
 		ModelAndView mav =new ModelAndView();
+		logger.info("ADMIN CALLED APPROVE USER METHOD");
 		boolean flag = adminDaoService.approveUser(id);
 		if(flag == true)
 		{
 			mav.addObject("userData",adminDaoService.getAllUsers());
 			mav.setViewName("AllUserList");
+			logger.info("USER SUCESSFULLY APPROVED BY ADMIN");
 			return mav;
 		}
 		else {
 			mav.setViewName("failure");
 			mav.addObject("message", "CAN NOT APPROVED");
+			logger.info("USER CAN NOT BE APPROVED BY ADMIN");
 		return mav;
 		}
 	}
@@ -102,17 +119,20 @@ public class AdminController {
 	public ModelAndView deleteUser(@RequestParam("id") int id)
 	{
 		ModelAndView mav =new ModelAndView();
+		logger.info("ADMIN CALLED DELETE USER METHOD");
 		boolean flag = adminDaoService.deleteUser(id);
 		if(flag == true)
 		{
 			mav.setViewName("AllUserList");
 			mav.addObject("userData",adminDaoService.getAllUsers());
+			logger.info("USER SUCCESSFULLY DELETED");
 			return mav;
 		}
 		else
 		{
 			mav.setViewName("failure");
 			mav.addObject("message", "USER IS NOT DELETED");
+			logger.info("USER CAN NOT BE DELETED");
 			return mav;
 		}
 	}
