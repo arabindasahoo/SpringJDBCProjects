@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>SPRING JDBC USER CRUD HOME PAGE</title>
 </head>
 <body>
 		
@@ -13,6 +13,6 @@
 			<a href="/UserCRUDSpringJDBCApp/admin/adminHome">ADMIN CLICK HERE</a><br><br>
 			<a href="/UserCRUDSpringJDBCApp/user/userHome">USER CLICK HERE</a>
 			</div>
-
+		
 </body>
 </html>
