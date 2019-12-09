@@ -13,6 +13,5 @@
 			<a href="/UserCRUDSpringJDBCApp/admin/adminHome">ADMIN CLICK HERE</a><br><br>
 			<a href="/UserCRUDSpringJDBCApp/user/userHome">USER CLICK HERE</a>
 			</div>
-		
 </body>
 </html>
