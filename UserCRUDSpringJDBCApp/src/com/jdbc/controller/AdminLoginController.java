@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,6 +49,7 @@ public class AdminLoginController {
 		{
 			mav.setViewName("adminPage");
 			session.setAttribute("email", email);
+			session.setAttribute("password", password);
 			mav.addObject("message", "WELCOME TO YOUR ACCOUNT");
 			return mav;
 		}
@@ -63,7 +65,8 @@ public class AdminLoginController {
 	public String logoutAdmin(HttpSession session)
 	{
 	
-		session.getAttribute("email");
+		session.removeAttribute("email");
+		session.removeAttribute("password");
 		session.invalidate();
 		/*
 		 * mav.setViewName("adminLoginPage"); return mav;
@@ -135,5 +138,12 @@ public class AdminLoginController {
 		}
 		
 	}
+	
+	@ExceptionHandler(value = Exception.class)
+	public String exceptionHandler()
+	{
+		return "adminLoginPage";
+	}
+	
 	
 }

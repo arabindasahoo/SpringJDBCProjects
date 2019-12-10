@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jdbc.model.admin.Admin;
+import com.jdbc.model.admin.AdminLogin;
 import com.jdbc.service.admin.AdminDaoService;
 
 @Controller
@@ -86,11 +87,23 @@ public class AdminController {
 	public ModelAndView getAllUsers(HttpSession session)
 	{
 		ModelAndView mav = new ModelAndView();
+		String email = (String)session.getAttribute("email");
+		String password = (String)session.getAttribute("password");
+		
+		if(email !=null && password != null)
+		{
 		logger.info("ADMIN CALLED SHOW USE LIST");
 		mav.addObject("userData",adminDaoService.getAllUsers());
 		mav.setViewName("AllUserList");
 		logger.info("ALL USER LIST PAGE RENDER TO BROWSER");
 		return mav;
+		}
+		else
+		{
+			mav.setViewName("adminLoginPage");
+			mav.addObject("loginAdmin",new AdminLogin());
+			return mav;
+		}
 		
 	}
 	
